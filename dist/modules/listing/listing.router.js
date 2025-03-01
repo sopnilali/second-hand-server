@@ -1,0 +1,21 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.listingRoutes = void 0;
+const express_1 = __importDefault(require("express"));
+const listing_controller_1 = require("./listing.controller");
+const bodyParser_1 = require("../../middlewares/bodyParser");
+const multer_config_1 = require("../../config/multer.config");
+const auth_1 = __importDefault(require("../../middlewares/auth"));
+const user_constant_1 = require("../user/user.constant");
+const validateRequest_1 = __importDefault(require("../../middlewares/validateRequest"));
+const listing_validation_1 = require("./listing.validation");
+const router = express_1.default.Router();
+router.post('/', (0, auth_1.default)(user_constant_1.USER_ROLE.user), multer_config_1.multerUpload.fields([{ name: 'images' }]), bodyParser_1.parseBody, (0, validateRequest_1.default)(listing_validation_1.ListValidationSchema.createListingValidationSchema), listing_controller_1.ListingController.createListing);
+router.get('/', listing_controller_1.ListingController.GetAllListing);
+router.get('/:id', listing_controller_1.ListingController.getSingleListing);
+router.put('/:id', (0, auth_1.default)(user_constant_1.USER_ROLE.user), multer_config_1.multerUpload.fields([{ name: 'images' }]), bodyParser_1.parseBody, (0, validateRequest_1.default)(listing_validation_1.ListValidationSchema.updateListingValidationSchema), listing_controller_1.ListingController.updateListing);
+router.delete('/:id', (0, auth_1.default)(user_constant_1.USER_ROLE.user), listing_controller_1.ListingController.deleteListing);
+exports.listingRoutes = router;
