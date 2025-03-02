@@ -1,1 +1,1 @@
-export const ListingSearchableFields = ['name', 'slug', 'description'];
+export const ListingSearchableFields = ['title','category', 'price', 'condition'];

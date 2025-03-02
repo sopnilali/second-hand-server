@@ -22,16 +22,16 @@ const createListing = catchAsync( async (req, res) => {
       })
 })
 
-const GetAllListing = catchAsync( async (req, res) => {
-    const result = await listingServices.GetAllListingFromDB()
-    sendResponse(res, {
-        statusCode: httpStatus.OK,
-        success: true,
-        message: 'Listings retrieved successfully',
-        data: result,
+const GetAllListing = catchAsync(async (req, res) => {
+  const result = await listingServices.GetAllListingFromDB(req.query);
 
-    })
-})
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Listing retrieved successfully',
+    data: result,
+  })
+});
 
 const updateListing = catchAsync(async (req, res) => {
     const {

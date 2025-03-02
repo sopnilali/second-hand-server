@@ -17,6 +17,8 @@ const http_status_1 = __importDefault(require("http-status"));
 const AppError_1 = __importDefault(require("../../errors/AppError"));
 const listing_model_1 = __importDefault(require("./listing.model"));
 const user_model_1 = require("../user/user.model");
+const QueryBuilder_1 = __importDefault(require("../../builder/QueryBuilder"));
+const listing_constant_1 = require("./listing.constant");
 const createListingFromDB = (listingsData, listingImages, authUser) => __awaiter(void 0, void 0, void 0, function* () {
     const { images } = listingImages;
     if (!images || images.length === 0) {
@@ -27,11 +29,22 @@ const createListingFromDB = (listingsData, listingImages, authUser) => __awaiter
     const result = yield listing_model_1.default.create(newListing);
     return result;
 });
-const GetAllListingFromDB = () => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield listing_model_1.default.find().populate({
-        path: 'userID',
-    });
-    return result;
+const GetAllListingFromDB = (query) => __awaiter(void 0, void 0, void 0, function* () {
+    const listingQuery = new QueryBuilder_1.default(listing_model_1.default.find().populate('userID'), query)
+        .search(listing_constant_1.ListingSearchableFields)
+        .filter()
+        .sort()
+        .paginate()
+        .fields();
+    const meta = yield listingQuery.countTotal();
+    const result = yield listingQuery.modelQuery;
+    if (!result.length) {
+        throw new AppError_1.default(http_status_1.default.NOT_FOUND, 'No listings found');
+    }
+    return {
+        meta,
+        result,
+    };
 });
 const getSingleListingFromDB = (listingId) => __awaiter(void 0, void 0, void 0, function* () {
     const product = yield listing_model_1.default.findById(listingId).populate({

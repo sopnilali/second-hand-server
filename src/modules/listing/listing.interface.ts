@@ -5,7 +5,15 @@ export interface TListings {
     description: string
     price: number
     condition: string
+    category: string
     images: string[]
     userID: Types.ObjectId;
     status: string
+}
+
+export interface TMeta {
+    total: number;
+    page: number;
+    limit: number;
+    totalPages: number;
 }

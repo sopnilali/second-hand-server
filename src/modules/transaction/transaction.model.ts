@@ -1,9 +1,9 @@
 import { model, Schema } from "mongoose";
-import { TTransaction } from "./transaction.interface";
+import { ITransaction } from "./transaction.interface";
 
 const transactionSchema = new Schema({
     itemID: {
-        type: Schema.Types.ObjectId,
+        type: [String],
         ref: 'listings',
         required: true
     },
@@ -25,6 +25,6 @@ const transactionSchema = new Schema({
 
 )
 
-const Transaction = model<TTransaction>('transactions', transactionSchema)
+const Transaction = model<ITransaction>('transactions', transactionSchema)
 
 export default Transaction

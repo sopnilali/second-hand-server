@@ -28,11 +28,11 @@ const createListing = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, 
     });
 }));
 const GetAllListing = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield listing_service_1.listingServices.GetAllListingFromDB();
+    const result = yield listing_service_1.listingServices.GetAllListingFromDB(req.query);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,
         success: true,
-        message: 'Listings retrieved successfully',
+        message: 'Listing retrieved successfully',
         data: result,
     });
 }));

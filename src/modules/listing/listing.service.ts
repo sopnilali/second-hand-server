@@ -5,6 +5,8 @@ import { TListings } from "./listing.interface";
 import Listings from "./listing.model";
 import { TAuthUser } from "../auth/auth.interface";
 import { User } from "../user/user.model";
+import QueryBuilder from "../../builder/QueryBuilder";
+import { ListingSearchableFields } from "./listing.constant";
 
 
 
@@ -33,11 +35,24 @@ const createListingFromDB = async (listingsData: Partial<TListings>, listingImag
     return result;
 }
 
-const GetAllListingFromDB = async () => {
-    const result = await Listings.find().populate({
-        path: 'userID',
-    })
-    return result;
+const GetAllListingFromDB = async (query: Record<string, unknown>) => {
+    const listingQuery = new QueryBuilder(Listings.find().populate('userID'), query)
+    .search(ListingSearchableFields)
+    .filter()
+    .sort()
+    .paginate()
+    .fields()
+
+    const meta = await listingQuery.countTotal();
+    const result = await listingQuery.modelQuery;
+
+    if(!result.length){
+        throw new AppError(httpStatus.NOT_FOUND, 'No listings found');
+    }
+    return {
+        meta,
+        result,
+    }
 }
 
 const getSingleListingFromDB = async (listingId: string) => {

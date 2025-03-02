@@ -16,15 +16,12 @@ exports.transactionServices = void 0;
 const listing_model_1 = __importDefault(require("../listing/listing.model"));
 const transaction_model_1 = __importDefault(require("./transaction.model"));
 const createTransationFromDB = (payload, authUser) => __awaiter(void 0, void 0, void 0, function* () {
-    // check if the item is available for sale
-    const item = yield listing_model_1.default.findById({ _id: payload.itemID });
-    if (!item) {
-        throw new Error("Item is not available for sale");
-    }
+    const { itemID } = payload;
+    const items = yield listing_model_1.default.find({ _id: { $in: itemID } }).exec();
     const transationData = {
         buyerID: authUser._id,
-        sellerID: item.userID,
-        itemID: payload.itemID
+        sellerID: items[0].userID,
+        itemID: itemID
     };
     const result = yield transaction_model_1.default.create(transationData);
     return result;
