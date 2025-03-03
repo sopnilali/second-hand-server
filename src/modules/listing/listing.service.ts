@@ -56,7 +56,7 @@ const GetAllListingFromDB = async (query: Record<string, unknown>) => {
 const getSingleListingFromDB = async (listingId: string) => {
     const product = await Listings.findById(listingId).populate({
         path: 'userID',
-    })
+    }).populate({path: 'category'})
     if (!product) {
         throw new AppError(httpStatus.NOT_FOUND, 'Listing not found');
     }

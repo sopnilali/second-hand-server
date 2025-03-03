@@ -49,7 +49,7 @@ const GetAllListingFromDB = (query) => __awaiter(void 0, void 0, void 0, functio
 const getSingleListingFromDB = (listingId) => __awaiter(void 0, void 0, void 0, function* () {
     const product = yield listing_model_1.default.findById(listingId).populate({
         path: 'userID',
-    });
+    }).populate({ path: 'category' });
     if (!product) {
         throw new AppError_1.default(http_status_1.default.NOT_FOUND, 'Listing not found');
     }
