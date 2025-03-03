@@ -1,3 +1,5 @@
+import httpStatus from "http-status";
+import AppError from "../../errors/AppError";
 import { TAuthUser } from "../auth/auth.interface";
 import Listings from "../listing/listing.model";
 import { ITransactionInput } from "./transaction.interface";
@@ -8,11 +10,21 @@ const createTransationFromDB = async (payload : ITransactionInput, authUser: TAu
 
     const { itemID } = payload;
 
-    const items = await Listings.find({ _id: { $in: itemID } }).exec();
+
+    const items = await Listings.findOne({ _id: itemID }).exec();
+
+    const existingTransaction = await Transaction.findOne({ itemID: itemID }).exec();
+    if (existingTransaction) {
+        throw new AppError(
+            httpStatus.BAD_REQUEST,
+            "Transaction already exists for this item"
+        );
+    }
+
 
     const transationData = {
         buyerID: authUser._id,
-        sellerID: items[0].userID, 
+        sellerID: items?.userID._id, 
         itemID: itemID
     }
 
@@ -27,7 +39,7 @@ const getAllTransactionFromDB = async () => {
         path: 'sellerID',
     }).populate({
         path: 'itemID',
-    })
+    }).sort("-createdAt")
     return result;
 }
 

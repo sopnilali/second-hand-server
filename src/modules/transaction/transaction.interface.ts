@@ -3,7 +3,7 @@ import { Types } from "mongoose"
 export interface ITransaction {
     buyerID?: string
     sellerID?: string
-    itemID?: string[]
+    itemID?: string
     status?: string
 }
 

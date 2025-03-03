@@ -7,7 +7,7 @@ const router = express.Router();
 
 
 
-router.get('/transactions', auth(USER_ROLE.user), transactionController.getAllTransactions)
+router.get('/transactions', transactionController.getAllTransactions)
 router.post('/transactions', auth(USER_ROLE.user), transactionController.createTransation)
 router.put('/transactions/:id', auth(USER_ROLE.user), transactionController.updateTransactionStatus)
 router.get('/sales/:userId', auth(USER_ROLE.user), transactionController.getSalesById)

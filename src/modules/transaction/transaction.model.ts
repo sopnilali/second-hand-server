@@ -3,9 +3,8 @@ import { ITransaction } from "./transaction.interface";
 
 const transactionSchema = new Schema({
     itemID: {
-        type: [String],
+        type: Schema.Types.ObjectId,
         ref: 'listings',
-        required: true
     },
     buyerID: {
         type: Schema.Types.ObjectId,

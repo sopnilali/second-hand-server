@@ -7,6 +7,7 @@ const admin_router_1 = require("../modules/admin/admin.router");
 const listing_router_1 = require("../modules/listing/listing.router");
 const transaction_router_1 = require("../modules/transaction/transaction.router");
 const category_router_1 = require("../modules/category/category.router");
+const wish_router_1 = require("../modules/wish/wish.router");
 const router = (0, express_1.Router)();
 const moduleRoutes = [
     {
@@ -32,6 +33,10 @@ const moduleRoutes = [
     {
         path: "/category",
         routes: category_router_1.categoryRoute
+    },
+    {
+        path: "/wish",
+        routes: wish_router_1.wisheRoutes
     }
 ];
 moduleRoutes.forEach(({ path, routes }) => {

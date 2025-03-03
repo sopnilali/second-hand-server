@@ -13,14 +13,20 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.transactionServices = void 0;
+const http_status_1 = __importDefault(require("http-status"));
+const AppError_1 = __importDefault(require("../../errors/AppError"));
 const listing_model_1 = __importDefault(require("../listing/listing.model"));
 const transaction_model_1 = __importDefault(require("./transaction.model"));
 const createTransationFromDB = (payload, authUser) => __awaiter(void 0, void 0, void 0, function* () {
     const { itemID } = payload;
-    const items = yield listing_model_1.default.find({ _id: { $in: itemID } }).exec();
+    const items = yield listing_model_1.default.findOne({ _id: itemID }).exec();
+    const existingTransaction = yield transaction_model_1.default.findOne({ itemID: itemID }).exec();
+    if (existingTransaction) {
+        throw new AppError_1.default(http_status_1.default.BAD_REQUEST, "Transaction already exists for this item");
+    }
     const transationData = {
         buyerID: authUser._id,
-        sellerID: items[0].userID,
+        sellerID: items === null || items === void 0 ? void 0 : items.userID._id,
         itemID: itemID
     };
     const result = yield transaction_model_1.default.create(transationData);
@@ -33,7 +39,7 @@ const getAllTransactionFromDB = () => __awaiter(void 0, void 0, void 0, function
         path: 'sellerID',
     }).populate({
         path: 'itemID',
-    });
+    }).sort("-createdAt");
     return result;
 });
 const updateTransactionStatusFromDB = (id, payload) => __awaiter(void 0, void 0, void 0, function* () {
