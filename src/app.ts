@@ -11,7 +11,8 @@ app.use(express.json())
 
 app.use(cors({
     origin: [
-        'http://localhost:5173'
+        'http://localhost:5173', 'https://secondhand-mart-client.vercel.app'
+
     ], // Allow requests from this specific origi,
     credentials: true 
 },

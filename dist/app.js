@@ -13,7 +13,7 @@ app.use(express_1.default.json());
 // CORS
 app.use((0, cors_1.default)({
     origin: [
-        'http://localhost:5173'
+        'http://localhost:5173', 'https://secondhand-mart-client.vercel.app'
     ], // Allow requests from this specific origi,
     credentials: true
 }));
