@@ -30,7 +30,7 @@ const createListingFromDB = (listingsData, listingImages, authUser) => __awaiter
     return result;
 });
 const GetAllListingFromDB = (query) => __awaiter(void 0, void 0, void 0, function* () {
-    const listingQuery = new QueryBuilder_1.default(listing_model_1.default.find().populate('userID'), query)
+    const listingQuery = new QueryBuilder_1.default(listing_model_1.default.find().populate('userID').populate('category'), query)
         .search(listing_constant_1.ListingSearchableFields)
         .filter()
         .sort()

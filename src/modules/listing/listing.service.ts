@@ -34,7 +34,7 @@ const createListingFromDB = async (listingsData: Partial<TListings>, listingImag
 }
 
 const GetAllListingFromDB = async (query: Record<string, unknown>) => {
-    const listingQuery = new QueryBuilder(Listings.find().populate('userID'), query)
+    const listingQuery = new QueryBuilder(Listings.find().populate('userID').populate('category'), query)
     .search(ListingSearchableFields)
     .filter()
     .sort()
