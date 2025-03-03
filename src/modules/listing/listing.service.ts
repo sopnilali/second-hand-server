@@ -29,8 +29,6 @@ const createListingFromDB = async (listingsData: Partial<TListings>, listingImag
         ...listingsData,
         userID: authUser._id,
     }
-
-
     const result = await Listings.create(newListing)
     return result;
 }

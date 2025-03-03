@@ -2,7 +2,7 @@ import { model, Schema } from "mongoose";
 import { TListings } from "./listing.interface";
 
 
-const listingSchema = new Schema( 
+const listingSchema = new Schema(
     {
         title: {
             type: String,
@@ -20,7 +20,11 @@ const listingSchema = new Schema(
             type: String,
             required: true,
         },
-        category: { type: String, required: true },
+        category: {
+            type: Schema.Types.ObjectId,
+            ref: "category",
+            required: true
+        },
         images: {
             type: [String],
             required: true,
@@ -34,7 +38,7 @@ const listingSchema = new Schema(
             type: String,
             enum: ['available', 'sold'],
             default: 'available'
-          },
+        },
     },
     { timestamps: true }
 )

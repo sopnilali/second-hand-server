@@ -5,7 +5,7 @@ export interface TListings {
     description: string
     price: number
     condition: string
-    category: string
+    category: Types.ObjectId;
     images: string[]
     userID: Types.ObjectId;
     status: string

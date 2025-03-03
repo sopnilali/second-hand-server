@@ -18,7 +18,11 @@ const listingSchema = new mongoose_1.Schema({
         type: String,
         required: true,
     },
-    category: { type: String, required: true },
+    category: {
+        type: mongoose_1.Schema.Types.ObjectId,
+        ref: "category",
+        required: true
+    },
     images: {
         type: [String],
         required: true,

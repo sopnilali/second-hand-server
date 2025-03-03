@@ -6,6 +6,7 @@ const auth_router_1 = require("../modules/auth/auth.router");
 const admin_router_1 = require("../modules/admin/admin.router");
 const listing_router_1 = require("../modules/listing/listing.router");
 const transaction_router_1 = require("../modules/transaction/transaction.router");
+const category_router_1 = require("../modules/category/category.router");
 const router = (0, express_1.Router)();
 const moduleRoutes = [
     {
@@ -27,6 +28,10 @@ const moduleRoutes = [
     {
         path: "/",
         routes: transaction_router_1.transactionRoutes
+    },
+    {
+        path: "/category",
+        routes: category_router_1.categoryRoute
     }
 ];
 moduleRoutes.forEach(({ path, routes }) => {
