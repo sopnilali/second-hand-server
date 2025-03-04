@@ -72,7 +72,6 @@ const updateListingFromDB = async (listingId: string, payload: Partial<TListings
     const user = await User.findById(authUser._id);
     const listings = await Listings.findOne({
         _id: listingId,
-        userId: authUser._id,
     })
     if (user?.isBlocked) {
         throw new AppError(httpStatus.NOT_FOUND, 'User is blocked');

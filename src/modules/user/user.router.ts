@@ -6,7 +6,7 @@ import validateRequest from '../../middlewares/validateRequest';
 import { authValidationSchema } from './user.validation';
 
 const router = express.Router();
-router.get('/', auth(USER_ROLE.admin), UserController.GetUsers)
+router.get('/', UserController.GetUsers)
 router.put('/:id', auth(USER_ROLE.user, USER_ROLE.admin), validateRequest(authValidationSchema.updateUserValidationSchema), UserController.updateUserContent)
 router.get('/:id', UserController.getUserById)
 router.delete('/:id', UserController.deleteUser)

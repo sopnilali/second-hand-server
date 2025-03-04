@@ -18,7 +18,8 @@ const transactionSchema = new mongoose_1.Schema({
         type: String,
         enum: ['pending', 'completed'],
         default: 'pending'
-    }
+    },
+    transactionId: { type: String, required: true, unique: true },
 }, { timestamps: true });
 const Transaction = (0, mongoose_1.model)('transactions', transactionSchema);
 exports.default = Transaction;

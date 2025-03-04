@@ -4,6 +4,7 @@ import { TListings } from "./listing.interface";
 
 const listingSchema = new Schema(
     {
+        
         title: {
             type: String,
             required: true,

@@ -37,7 +37,7 @@ const GetAllListing = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, 
     });
 }));
 const updateListing = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { user, body: payload, params: { id }, } = req;
+    const { user, body: payload, params: { id } } = req;
     const result = yield listing_service_1.listingServices.updateListingFromDB(id, payload, req.files, user);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,

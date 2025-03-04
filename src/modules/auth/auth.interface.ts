@@ -6,4 +6,5 @@ export type TLoginUser = {
 export type TAuthUser = {
     _id: string;
     
+    
 }

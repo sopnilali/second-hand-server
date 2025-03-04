@@ -2,41 +2,109 @@ import httpStatus from "http-status";
 import AppError from "../../errors/AppError";
 import { TAuthUser } from "../auth/auth.interface";
 import Listings from "../listing/listing.model";
-import { ITransactionInput } from "./transaction.interface";
+import { ITransaction } from "./transaction.interface";
 import Transaction from "./transaction.model";
+import { generateTransactionId } from "./transaction.utils";
+import { SSLCommerzService } from "../sslcommerz/sslcommerz.service";
+import { TListings } from "../listing/listing.interface";
 
 
-const createTransationFromDB = async (payload : ITransactionInput, authUser: TAuthUser) => {
+const createTransationFromDB = async (payload : ITransaction, authUser: TAuthUser) => {
 
     const { itemID } = payload;
 
-
-    const items = await Listings.findOne({ _id: itemID }).exec();
+    const items : any = await Listings.findOne({ _id: itemID }).exec();
 
     const existingTransaction = await Transaction.findOne({ itemID: itemID }).exec();
+
+
     if (existingTransaction) {
         throw new AppError(
             httpStatus.BAD_REQUEST,
-            "Transaction already exists for this item"
+            "Transaction already in this user"
         );
     }
 
-
+    const transactionId = generateTransactionId();
+    
     const transationData = {
+        transactionId : transactionId,
         buyerID: authUser._id,
         sellerID: items?.userID._id, 
         itemID: itemID
     }
 
-    const result = await Transaction.create(transationData)
-    return result;
+    const paymentResponse = await SSLCommerzService.initiatePayment({
+        total_amount: items.price,
+        currency: 'BDT',
+        tran_id: transactionId,
+        success_url: `${process.env.CLIENT_URL}/order/${transactionId}`,
+        fail_url: `${process.env.CLIENT_URL}/order/order-fail/${transactionId}`,
+        cancel_url: `${process.env.CLIENT_URL}/order/order-cancel/${transactionId}`,
+        shipping_method: 'Courier',
+        product_name: 'N/A.',
+        product_category: 'N/A',
+        product_profile: 'general',
+        cus_name: 'N/A',
+        cus_email: 'N/A',
+        cus_add1: 'Dhaka',
+        cus_add2: 'Dhaka',
+        cus_city: 'Dhaka',
+        cus_state: 'Dhaka',
+        cus_postcode: '1000',
+        cus_country: 'Bangladesh',
+        cus_phone: '01711111111',
+        cus_fax: '01711111111',
+        ship_name: 'N/A',
+        ship_add1: 'Dhaka',
+        ship_add2: 'Dhaka',
+        ship_city: 'Dhaka',
+        ship_state: 'Dhaka',
+        ship_postcode: 1000,
+        ship_country: 'Bangladesh',
+      });
+
+
+
+    const createdOrder = await Transaction.create(transationData)
+
+
+    return {
+        createdOrder,
+        paymentURL : paymentResponse
+    };
 }
+
+
+
 
 const getAllTransactionFromDB = async () => {
     const result = await Transaction.find().populate({
         path: 'buyerID',
     }).populate({
         path: 'sellerID',
+    }).populate({
+        path: 'itemID',
+    }).sort("-createdAt")
+    return result;
+}
+
+const getSingleTransactionFromDB = async (transactionId: string) => {
+    const result = await Transaction.find({transactionId: transactionId}).populate({
+        path: 'buyerID',
+    }).populate({
+        path: 'sellerID',
+    }).populate({
+        path: 'itemID',
+    }).sort("-createdAt")
+    return result;
+}
+
+const getSinglePurchasesHistoryFromDB = async (id: any, buyerId: any)=> {
+    const result = await Transaction.findOne({ _id: id, buyerID: buyerId}).populate({
+        path: 'buyerID',
+    }).populate({
+        path:'sellerID',
     }).populate({
         path: 'itemID',
     }).sort("-createdAt")
@@ -91,10 +159,18 @@ const getPurchasesByIdFromDB = async (userId: string) => {
     return result;
 }
 
+const deleteTransactionFromDB = async (orderId: string) => {
+    const result = await Transaction.findByIdAndDelete(orderId)
+    return result;
+}
+
 export const transactionServices = {
     createTransationFromDB,
     getAllTransactionFromDB,
     getSalesByIdFromDB,
     updateTransactionStatusFromDB,
-    getPurchasesByIdFromDB
+    getPurchasesByIdFromDB,
+    getSingleTransactionFromDB,
+    deleteTransactionFromDB,
+    getSinglePurchasesHistoryFromDB
 }

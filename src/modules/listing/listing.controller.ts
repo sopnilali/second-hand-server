@@ -34,11 +34,7 @@ const GetAllListing = catchAsync(async (req, res) => {
 });
 
 const updateListing = catchAsync(async (req, res) => {
-    const {
-      user,
-      body: payload,
-      params: { id },
-    } = req;
+    const {user,body: payload,params: { id } } = req;
   
     const result = await listingServices.updateListingFromDB(
       id,

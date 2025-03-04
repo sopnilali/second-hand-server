@@ -4,25 +4,45 @@ import sendResponse from "../../utils/sendResponse";
 import Transaction from "./transaction.model";
 import { transactionServices } from "./transaction.services";
 import { TAuthUser } from "../auth/auth.interface";
+import { Document } from "mongoose";
 
 
 const createTransation = catchAsync( async (req, res) => {
 
+    const transactionPayload = req.body
+    const userEmail = req?.user?.userEmail
+
 
     // TODO: Implement transaction logic
 
-    const result = await transactionServices.createTransationFromDB(req.body, req.user as TAuthUser)
+    const {createdOrder, paymentURL} = await transactionServices.createTransationFromDB(transactionPayload, req.user as TAuthUser)
+
+    const orderData = createdOrder instanceof Document ? createdOrder.toObject() : createdOrder;
     
     sendResponse(res, {
         statusCode: httpStatus.OK,
         success: true,
         message: 'Transaction created successfully',
-        data: result,
+        data: {
+            ...orderData,
+            paymentURL
+        },
     });
 })
 
 const getAllTransactions = catchAsync(async (req, res) => {
     const result = await transactionServices.getAllTransactionFromDB()
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'Transaction retrieved successfully',
+        data: result,
+    });
+})
+
+const getSingleTransactions = catchAsync(async (req, res) => {
+    const { id } = req.params;
+    const result = await transactionServices.getSingleTransactionFromDB(id)
     sendResponse(res, {
         statusCode: httpStatus.OK,
         success: true,
@@ -78,10 +98,38 @@ const getPurchasesById = catchAsync(async (req, res) => {
     });
 })
 
+const deleteTransaction = catchAsync(async (req, res) => {
+    const { id } = req.params;
+    await transactionServices.deleteTransactionFromDB(id)
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'Transaction deleted successfully',
+        data: []
+    });
+})
+
+const getSinglePurchasesHistory = catchAsync(async (req, res) => {
+    const { id } = req.params;
+    const {_id} = req.user
+
+    console.log(_id)
+    const result = await transactionServices.getSinglePurchasesHistoryFromDB({_id: id}, _id )
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'Purchases history retrieved successfully',
+        data: result,
+    });
+});
+
 export const transactionController = {
     createTransation,
     getAllTransactions,
     getSalesById,
     updateTransactionStatus,
-    getPurchasesById
+    getPurchasesById,
+    getSingleTransactions,
+    deleteTransaction,
+    getSinglePurchasesHistory
 }

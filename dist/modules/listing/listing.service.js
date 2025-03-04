@@ -61,7 +61,6 @@ const updateListingFromDB = (listingId, payload, listingImages, authUser) => __a
     const user = yield user_model_1.User.findById(authUser._id);
     const listings = yield listing_model_1.default.findOne({
         _id: listingId,
-        userId: authUser._id,
     });
     if (user === null || user === void 0 ? void 0 : user.isBlocked) {
         throw new AppError_1.default(http_status_1.default.NOT_FOUND, 'User is blocked');

@@ -17,18 +17,33 @@ const http_status_1 = __importDefault(require("http-status"));
 const catchAsync_1 = __importDefault(require("../../utils/catchAsync"));
 const sendResponse_1 = __importDefault(require("../../utils/sendResponse"));
 const transaction_services_1 = require("./transaction.services");
+const mongoose_1 = require("mongoose");
 const createTransation = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
+    const transactionPayload = req.body;
+    const userEmail = (_a = req === null || req === void 0 ? void 0 : req.user) === null || _a === void 0 ? void 0 : _a.userEmail;
     // TODO: Implement transaction logic
-    const result = yield transaction_services_1.transactionServices.createTransationFromDB(req.body, req.user);
+    const { createdOrder, paymentURL } = yield transaction_services_1.transactionServices.createTransationFromDB(transactionPayload, req.user);
+    const orderData = createdOrder instanceof mongoose_1.Document ? createdOrder.toObject() : createdOrder;
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,
         success: true,
         message: 'Transaction created successfully',
-        data: result,
+        data: Object.assign(Object.assign({}, orderData), { paymentURL }),
     });
 }));
 const getAllTransactions = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield transaction_services_1.transactionServices.getAllTransactionFromDB();
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: 'Transaction retrieved successfully',
+        data: result,
+    });
+}));
+const getSingleTransactions = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    const result = yield transaction_services_1.transactionServices.getSingleTransactionFromDB(id);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,
         success: true,
@@ -80,10 +95,35 @@ const getPurchasesById = (0, catchAsync_1.default)((req, res) => __awaiter(void 
         }),
     });
 }));
+const deleteTransaction = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    yield transaction_services_1.transactionServices.deleteTransactionFromDB(id);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: 'Transaction deleted successfully',
+        data: []
+    });
+}));
+const getSinglePurchasesHistory = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    const { _id } = req.user;
+    console.log(_id);
+    const result = yield transaction_services_1.transactionServices.getSinglePurchasesHistoryFromDB({ _id: id }, _id);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: 'Purchases history retrieved successfully',
+        data: result,
+    });
+}));
 exports.transactionController = {
     createTransation,
     getAllTransactions,
     getSalesById,
     updateTransactionStatus,
-    getPurchasesById
+    getPurchasesById,
+    getSingleTransactions,
+    deleteTransaction,
+    getSinglePurchasesHistory
 };

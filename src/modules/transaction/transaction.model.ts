@@ -18,7 +18,8 @@ const transactionSchema = new Schema({
         type: String,
         enum: ['pending', 'completed'],
         default: 'pending'
-      }
+      },
+    transactionId: { type: String, required: true, unique: true },
 },
 { timestamps: true }
 
