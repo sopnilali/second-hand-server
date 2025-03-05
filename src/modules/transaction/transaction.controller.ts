@@ -71,10 +71,12 @@ const getSalesById = catchAsync(async (req, res) => {
         message: 'Sales retrieved successfully',
         data: result.map(p => {
             return {
-                transactionID: p._id,
+                transactionId: p._id,
                 buyerID: p.buyerID,
                 itemID: p.itemID,
-                status: p.status
+                status: p.status,
+                createdAt: p.createdAt,
+                updatedAt: p.updatedAt
             }
         }),
     });
@@ -89,10 +91,12 @@ const getPurchasesById = catchAsync(async (req, res) => {
         message: 'Purchases retrieved successfully',
         data: result.map(p => {
             return {
-                transactionID: p._id,
+                transactionId: p._id,
                 sellerID: p.sellerID,
                 itemID: p.itemID,
-                status: p.status
+                status: p.status,
+                createdAt: p.createdAt,
+                updatedAt: p.updatedAt
             }
         }),
     });
