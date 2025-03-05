@@ -13,16 +13,6 @@ const createTransationFromDB = async (payload : ITransaction, authUser: TAuthUse
 
     const items : any = await Listings.findOne({ _id: itemID }).exec();
 
-    const existingTransaction = await Transaction.findOne({ itemID: itemID }).exec();
-
-
-    if (existingTransaction) {
-        throw new AppError(
-            httpStatus.BAD_REQUEST,
-            "Sold Out"
-        );
-    }
-
     const transactionId = generateTransactionId();
     
     const transationData = {
@@ -87,8 +77,8 @@ const getAllTransactionFromDB = async () => {
     return result;
 }
 
-const getSingleTransactionFromDB = async (transactionId: string) => {
-    const result = await Transaction.find({transactionId: transactionId}).populate({
+const getSingleTransactionFromDB = async (orderId: string) => {
+    const result = await Transaction.findOne({_id: orderId}).populate({
         path: 'buyerID',
     }).populate({
         path: 'sellerID',

@@ -22,16 +22,7 @@ const createTransation = catchAsync( async (req, res) => {
     const {createdOrder, paymentURL} = await transactionServices.createTransationFromDB(transactionPayload, req.user as TAuthUser)
 
     const orderData = createdOrder instanceof Document ? createdOrder.toObject() : createdOrder;
-
-    console.log({
-        image: item.images[0],
-        productName: item.title,
-        productPrice: item.price.toString(),
-        buyerName: req.user?.name,
-        sellerName: item.title,
-        sellerEmail: item.userID.email,
-    })
-
+    
     sendMail({
         image: item.images[0],
         productName: item.title,
@@ -148,6 +139,7 @@ const getSinglePurchasesHistory = catchAsync(async (req, res) => {
         data: result,
     });
 });
+
 
 export const transactionController = {
     createTransation,

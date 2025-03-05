@@ -13,8 +13,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.transactionServices = void 0;
-const http_status_1 = __importDefault(require("http-status"));
-const AppError_1 = __importDefault(require("../../errors/AppError"));
 const listing_model_1 = __importDefault(require("../listing/listing.model"));
 const transaction_model_1 = __importDefault(require("./transaction.model"));
 const transaction_utils_1 = require("./transaction.utils");
@@ -22,10 +20,6 @@ const sslcommerz_service_1 = require("../sslcommerz/sslcommerz.service");
 const createTransationFromDB = (payload, authUser) => __awaiter(void 0, void 0, void 0, function* () {
     const { itemID } = payload;
     const items = yield listing_model_1.default.findOne({ _id: itemID }).exec();
-    const existingTransaction = yield transaction_model_1.default.findOne({ itemID: itemID }).exec();
-    if (existingTransaction) {
-        throw new AppError_1.default(http_status_1.default.BAD_REQUEST, "Sold Out");
-    }
     const transactionId = (0, transaction_utils_1.generateTransactionId)();
     const transationData = {
         transactionId: transactionId,
@@ -78,8 +72,8 @@ const getAllTransactionFromDB = () => __awaiter(void 0, void 0, void 0, function
     }).sort("-createdAt");
     return result;
 });
-const getSingleTransactionFromDB = (transactionId) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield transaction_model_1.default.find({ transactionId: transactionId }).populate({
+const getSingleTransactionFromDB = (orderId) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield transaction_model_1.default.findOne({ _id: orderId }).populate({
         path: 'buyerID',
     }).populate({
         path: 'sellerID',
