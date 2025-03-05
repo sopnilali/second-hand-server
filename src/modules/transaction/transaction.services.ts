@@ -21,7 +21,7 @@ const createTransationFromDB = async (payload : ITransaction, authUser: TAuthUse
     if (existingTransaction) {
         throw new AppError(
             httpStatus.BAD_REQUEST,
-            "Transaction already in this user"
+            "Sold Out"
         );
     }
 

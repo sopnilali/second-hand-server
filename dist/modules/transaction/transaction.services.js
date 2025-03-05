@@ -24,7 +24,7 @@ const createTransationFromDB = (payload, authUser) => __awaiter(void 0, void 0, 
     const items = yield listing_model_1.default.findOne({ _id: itemID }).exec();
     const existingTransaction = yield transaction_model_1.default.findOne({ itemID: itemID }).exec();
     if (existingTransaction) {
-        throw new AppError_1.default(http_status_1.default.BAD_REQUEST, "Transaction already in this user");
+        throw new AppError_1.default(http_status_1.default.BAD_REQUEST, "Sold Out");
     }
     const transactionId = (0, transaction_utils_1.generateTransactionId)();
     const transationData = {
