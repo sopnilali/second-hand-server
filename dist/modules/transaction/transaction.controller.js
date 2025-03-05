@@ -32,7 +32,7 @@ const createTransation = (0, catchAsync_1.default)((req, res) => __awaiter(void 
         productName: item.title,
         productPrice: item.price,
         buyerName: (_a = req.user) === null || _a === void 0 ? void 0 : _a.name,
-        sellerName: item.title,
+        sellerName: item.userID.name,
         sellerEmail: item.userID.email,
     });
     (0, sendResponse_1.default)(res, {

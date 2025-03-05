@@ -5,22 +5,22 @@ import config from '../config';
 
 // Define TypeScript types for the sendMail function
 interface MailOptions {
-  image: string[];
-  productName: string;
-  productPrice: string;
-  buyerName: string;
-  sellerName: string;
-  sellerEmail: string;
+    image: string[];
+    productName: string;
+    productPrice: string;
+    buyerName: string;
+    sellerName: string;
+    sellerEmail: string;
 }
 
-export const sendMail = async({
-  image,
-  productName,
-  productPrice,
-  buyerName,
-  sellerName,
-  sellerEmail
-}: MailOptions)=> {
+export const sendMail = async ({
+    image,
+    productName,
+    productPrice,
+    buyerName,
+    sellerName,
+    sellerEmail
+}: MailOptions) => {
 
 
 
@@ -28,16 +28,16 @@ export const sendMail = async({
     const transporter = nodemailer.createTransport({
         host: "smtp.gmail.com",
         port: 587,
-        service:'gmail',
+        service: 'gmail',
         secure: config.node_env === 'production',
         auth: {
-          user: "sopnilstar@gmail.com",
-          pass: "zbgq npak wrsd khwv",
+            user: "sopnilstar@gmail.com",
+            pass: "zbgq npak wrsd khwv",
         },
-      });
+    });
 
 
-      const emailHTML = `
+    const emailHTML = `
 <!DOCTYPE html>
 <html>
 <head>
@@ -70,7 +70,7 @@ export const sendMail = async({
             text-align: center;
             font-size: 40px;
             font-weight: bold;
-            color: #ff8e00;
+            color: #e5532a;
         }
         .product-image {
             text-align: center;
@@ -93,34 +93,35 @@ export const sendMail = async({
         }
         .order-details span {
             font-weight: bold;
-            color: #ff8e00;
+            color: #e5532a;
         }
         .buttons {
             text-align: center;
             margin-top: 20px;
+            color: white;
         }
         .btn {
             display: inline-block;
             padding: 10px 20px;
             margin: 5px;
+            color: white !important;
             font-size: 16px;
-            color: #fff;
             text-decoration: none;
             border-radius: 5px;
         }
       .confirm-btn {
-background: linear-gradient(to right, blue, green); /* Gradient background */
-padding: 10px 30px;
-border-radius: 8px;
-color: #fff;
-font-weight: bold;
-text-decoration: none;
-transition: all 0.3s ease;
-}
+      background: linear-gradient(to right, #e5532a, #d1461cd2); 
+      padding: 10px 30px;
+      border-radius: 8px;
+      font-weight: bold;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      }
 
 .confirm-btn:hover {
-background: linear-gradient(to right, #3d04c2, #59e209); /* Hover gradient */
-cursor: pointer; /* Optional: Change cursor to pointer on hover */
+background: linear-gradient(to right, #e5532a, #d1461cd2); 
+cursor: pointer; 
+color: white;
 }
     </style>
 </head>
@@ -153,11 +154,11 @@ Confirm Order
 </body>
 </html>
     `;
-      await transporter.sendMail({
+    await transporter.sendMail({
         from: 'sopnilstar@gmail.com', // sender address
         to: sellerEmail, // list of receivers
-        subject: "Order Confirmation ✅",
+        subject: "No Replay: Your Order Confirmation ✅",
         html: emailHTML, // html body
-      });
-      
+    });
+
 }
