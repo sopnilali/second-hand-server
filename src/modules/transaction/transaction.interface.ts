@@ -2,8 +2,8 @@ import { Types } from "mongoose"
 
 export interface ITransaction {
   transactionId?: string;
-  buyerID?: string
-  sellerID?: string
+  buyerID?: Types.ObjectId;
+  sellerID?: Types.ObjectId;
   itemID?: string
   status: 'pending' | 'completed';
   createdAt?: Date;

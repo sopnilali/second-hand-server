@@ -1,4 +1,5 @@
 import { Types } from "mongoose"
+import { TUser } from "../user/user.interface"
 
 export interface TListings {
     title: string
@@ -7,9 +8,10 @@ export interface TListings {
     condition: string
     category: Types.ObjectId;
     images: string[]
-    userID: Types.ObjectId;
+    userID: TUser;
     status: string
-}
+    
+} 
 
 export interface TMeta {
     total: number;

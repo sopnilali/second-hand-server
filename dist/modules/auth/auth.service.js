@@ -19,7 +19,6 @@ const config_1 = __importDefault(require("../../config"));
 const AppError_1 = __importDefault(require("../../errors/AppError"));
 const auth_utils_1 = require("./auth.utils");
 const user_model_1 = require("../user/user.model");
-const sendEmail_1 = require("../../utils/sendEmail");
 const loginUser = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     // checking if the user is exist
     const user = yield user_model_1.User.isUserExistsByCustomEmail(payload.email);
@@ -105,13 +104,15 @@ const forgetPassword = (email) => __awaiter(void 0, void 0, void 0, function* ()
     if (userStatus === true) {
         throw new AppError_1.default(http_status_1.default.FORBIDDEN, 'This user is blocked ! !');
     }
-    const jetPayLoad = {
-        userEmail: user.email,
-        role: user.role,
-    };
-    const resetToken = (0, auth_utils_1.createToken)(jetPayLoad, config_1.default.jwt_access_secret, '20m');
-    const resetUILink = `${config_1.default.reset_pass_ui_link}?id=${user.email}&token=${resetToken} `;
-    (0, sendEmail_1.sendMail)(user.email, resetUILink);
+    //  const jetPayLoad = {
+    //   userEmail: user.email,
+    //   role: user.role,
+    //  }
+    //  const resetToken = createToken(
+    //   jetPayLoad,
+    //   config.jwt_access_secret as string,
+    //   '20m',
+    // );
 });
 const restPassword = (payload, token) => __awaiter(void 0, void 0, void 0, function* () {
     const decoded = (0, auth_utils_1.verifyToken)(token, config_1.default.jwt_access_secret);

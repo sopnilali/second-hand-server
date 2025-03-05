@@ -5,12 +5,16 @@ import Transaction from "./transaction.model";
 import { transactionServices } from "./transaction.services";
 import { TAuthUser } from "../auth/auth.interface";
 import { Document } from "mongoose";
+import { sendMail } from "../../utils/sendEmail";
+import Listings from "../listing/listing.model";
+import { TListings } from "../listing/listing.interface";
 
 
 const createTransation = catchAsync( async (req, res) => {
 
     const transactionPayload = req.body
-    const userEmail = req?.user?.userEmail
+
+    const item : any = await Listings.findById(transactionPayload.itemID).populate('userID')
 
 
     // TODO: Implement transaction logic
@@ -18,6 +22,24 @@ const createTransation = catchAsync( async (req, res) => {
     const {createdOrder, paymentURL} = await transactionServices.createTransationFromDB(transactionPayload, req.user as TAuthUser)
 
     const orderData = createdOrder instanceof Document ? createdOrder.toObject() : createdOrder;
+
+    console.log({
+        image: item.images[0],
+        productName: item.title,
+        productPrice: item.price.toString(),
+        buyerName: req.user?.name,
+        sellerName: item.title,
+        sellerEmail: item.userID.email,
+    })
+
+    sendMail({
+        image: item.images[0],
+        productName: item.title,
+        productPrice: item.price,
+        buyerName: req.user?.name,
+        sellerName: item.title,
+        sellerEmail: item.userID.email,
+    })
     
     sendResponse(res, {
         statusCode: httpStatus.OK,

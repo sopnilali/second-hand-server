@@ -18,13 +18,31 @@ const catchAsync_1 = __importDefault(require("../../utils/catchAsync"));
 const sendResponse_1 = __importDefault(require("../../utils/sendResponse"));
 const transaction_services_1 = require("./transaction.services");
 const mongoose_1 = require("mongoose");
+const sendEmail_1 = require("../../utils/sendEmail");
+const listing_model_1 = __importDefault(require("../listing/listing.model"));
 const createTransation = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a;
+    var _a, _b;
     const transactionPayload = req.body;
-    const userEmail = (_a = req === null || req === void 0 ? void 0 : req.user) === null || _a === void 0 ? void 0 : _a.userEmail;
+    const item = yield listing_model_1.default.findById(transactionPayload.itemID).populate('userID');
     // TODO: Implement transaction logic
     const { createdOrder, paymentURL } = yield transaction_services_1.transactionServices.createTransationFromDB(transactionPayload, req.user);
     const orderData = createdOrder instanceof mongoose_1.Document ? createdOrder.toObject() : createdOrder;
+    console.log({
+        image: item.images[0],
+        productName: item.title,
+        productPrice: item.price.toString(),
+        buyerName: (_a = req.user) === null || _a === void 0 ? void 0 : _a.name,
+        sellerName: item.title,
+        sellerEmail: item.userID.email,
+    });
+    (0, sendEmail_1.sendMail)({
+        image: item.images[0],
+        productName: item.title,
+        productPrice: item.price,
+        buyerName: (_b = req.user) === null || _b === void 0 ? void 0 : _b.name,
+        sellerName: item.title,
+        sellerEmail: item.userID.email,
+    });
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,
         success: true,

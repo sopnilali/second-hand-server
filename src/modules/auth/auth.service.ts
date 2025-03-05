@@ -143,20 +143,16 @@ const forgetPassword = async (email: string) => {
   if (userStatus === true) {
     throw new AppError(httpStatus.FORBIDDEN, 'This user is blocked ! !');
   }
-   const jetPayLoad = {
-    userEmail: user.email,
-    role: user.role,
-   }
+  //  const jetPayLoad = {
+  //   userEmail: user.email,
+  //   role: user.role,
+  //  }
 
-   const resetToken = createToken(
-    jetPayLoad,
-    config.jwt_access_secret as string,
-    '20m',
-  );
-
-  const resetUILink = `${config.reset_pass_ui_link}?id=${user.email}&token=${resetToken} `;
-
-  sendMail(user.email, resetUILink)
+  //  const resetToken = createToken(
+  //   jetPayLoad,
+  //   config.jwt_access_secret as string,
+  //   '20m',
+  // );
 
 }
 
