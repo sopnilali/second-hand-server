@@ -6,8 +6,6 @@ import { ITransaction } from "./transaction.interface";
 import Transaction from "./transaction.model";
 import { generateTransactionId } from "./transaction.utils";
 import { SSLCommerzService } from "../sslcommerz/sslcommerz.service";
-import { TListings } from "../listing/listing.interface";
-
 
 const createTransationFromDB = async (payload : ITransaction, authUser: TAuthUser) => {
 
@@ -38,9 +36,9 @@ const createTransationFromDB = async (payload : ITransaction, authUser: TAuthUse
         total_amount: items.price,
         currency: 'BDT',
         tran_id: transactionId,
-        success_url: `${process.env.CLIENT_URL}/order/${transactionId}`,
-        fail_url: `${process.env.CLIENT_URL}/order/order-fail/${transactionId}`,
-        cancel_url: `${process.env.CLIENT_URL}/order/order-cancel/${transactionId}`,
+        success_url: `${process.env.CLIENT_URL}/order-success`,
+        fail_url: `${process.env.CLIENT_URL}/order-fail`,
+        cancel_url: `${process.env.CLIENT_URL}/order-cancel`,
         shipping_method: 'Courier',
         product_name: 'N/A.',
         product_category: 'N/A',
