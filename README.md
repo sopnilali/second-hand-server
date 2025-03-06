@@ -1,4 +1,4 @@
-# 🎉 Welcome to My Stationary Shop !!
+# 🎉 Welcome to My Secondhand Mart!!
 <h2>Secondhand Mart Server API</h2>
 <p>Assalamu Alaikum! My Name is Md Abdul Adud. Project Name: Secondhand Mart. I am Develop an Express application with TypeScript, integrating MongoDB with Mongoose to manage a Secondhand Mart.</p>
 
