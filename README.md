@@ -4,18 +4,18 @@
 
 <h2>Project Name: Stationery Shop</h2>
 
-<strong>GitHub Repository Link</strong> : https://github.com/sopnilali/stationery-shop-server
+<strong>GitHub Repository Link</strong> : https://github.com/sopnilali/second-hand-server
 
- <strong>Live: URL</strong> : https://stationery-shop-server.vercel.app/
+ <strong>Live: URL</strong> :h ttps://second-hand-server-two.vercel.app
 
- <strong>Video Explanation</strong>: https://drive.google.com/file/d/1T1gZgC2GYnobyTviYXZuG1ZKCiOfoCfy/view?usp=sharing
+ <strong>Video Explanation</strong>: https://drive.google.com/file/d/103mRsyOnl-NqT0TGyfVq3vFDQuWqjrNv/view?usp=drive_link
 
 <h2>Technology Used ⚙️</h2>
 <li>Node</li>
 <li>Express</li>
 <li>React</li>
 <li>Mongoose</li>
-<li>Redux</li>
+<li>sslcommerz Payment Gateway</li>
 <li>TypeScript</li>
 
 # Folder Structure 📂
@@ -36,101 +36,116 @@ src/
 │   │   ├── auth.service.ts
 │   │   ├── auth.utils.ts
 │   │   ├── auth.validation.ts
-│   ├── blog/
-│   │   ├── blog.constant.ts
-│   │   ├── blog.controller.ts
-│   │   ├── blog.interface.ts
-│   │   ├── blog.model.ts
-│   │   ├── blog.router.ts
-│   │   ├── blog.service.ts
-│   ├── orders/
-│   │   ├── order.controller.ts
-│   │   ├── order.interface.ts
-│   │   ├── order.model.ts
-│   │   ├── order.router.ts
-│   │   ├── order.service.ts
-│   ├── products/
-│   │   ├── product.controller.ts
-│   │   ├── product.interface.ts
-│   │   ├── product.model.ts
-│   │   ├── product.router.ts
-│   │   ├── product.service.ts
+│   ├── category/
+│   │   ├── category.constant.ts
+│   │   ├── category.controller.ts
+│   │   ├── category.interface.ts
+│   │   ├── category.model.ts
+│   │   ├── category.router.ts
+│   │   ├── category.service.ts
+│   │   ├── category.validation.ts
+│   ├── listing/
+│   │   ├── listing.constant.ts
+│   │   ├── listing.controller.ts
+│   │   ├── listing.interface.ts
+│   │   ├── listing.model.ts
+│   │   ├── listing.router.ts
+│   │   ├── listing.service.ts
+│   │   ├── listing.validation.ts
+│   ├── sslcommerz/
+│   │   ├── sslcommerz.service.ts
+│   ├── transaction/
+│   │   ├── transaction.controller.ts
+│   │   ├── transaction.interface.ts
+│   │   ├── transaction.model.ts
+│   │   ├── transaction.router.ts
+│   │   ├── transaction.service.ts
+│   │   ├── transaction.utils.ts
 │   ├── user/
+│   │   ├── user.constant.ts
 │   │   ├── user.controller.ts
 │   │   ├── user.interface.ts
 │   │   ├── user.model.ts
 │   │   ├── user.router.ts
 │   │   ├── user.service.ts
 │   │   ├── user.validation.ts
+│   ├── wish/
+│   │   ├── wish.controller.ts
+│   │   ├── wish.interface.ts
+│   │   ├── wish.model.ts
+│   │   ├── wish.router.ts
+│   │   ├── wish.service.ts
+│   │   ├── wish.validation.ts
 ├── app.ts
 ├── server.ts
 </pre>
 
-# Product Model 🚟
+# Listings Model 🚟
+<p> I created the listings model.</p>
 <pre>
-    name: { type: String, required: true },
-    brand: { type: String, required: true },
-    price: {
-      type: Number,
-      required: true,
-      min: [0, 'Price must be a positive number'], // if price is negative then price must be positive message show.
-    },
-    category: {
-      type: String,
-      required: true,
-    },
-    description: { type: String, required: true },
-    productImg: { type: String, default: 'https://i.ibb.co.com/F40Mt4Y/touchicon-180.png'},
-    author: {
-      type: Schema.Types.ObjectId,
-        ref: 'users',
-    },
-    stock: { type: Number, required: true, default: 0 }
+        title: {
+            type: String,
+            required: true,
+        },
+        description: {
+            type: String,
+            required: true,
+        },
+        price: {
+            type: Number,
+            required: true,
+        },
+        condition: {
+            type: String,
+            required: true,
+        },
+        category: {
+            type: Schema.Types.ObjectId,
+            ref: "category",
+            required: true
+        },
+        images: {
+            type: [String],
+            required: true,
+        },
+        userID: {
+            type: Schema.Types.ObjectId,
+            ref: 'users',
+            required: true,
+        },
+        status: {                    // Status of the listing
+            type: String,
+            enum: ['available', 'sold'],
+            default: 'available'
+        },
 </pre>
  
-# Order Model 🚟
-<p> I created the order model.</p>
+# Transactions Model 🚟
+<p> I created the transactions model.</p>
 <pre>
-    user: {
-      type: Schema.Types.ObjectId,
-      ref: "users",
-      required: true,
+    itemID: {
+        type: Schema.Types.ObjectId,
+        ref: 'listings',
     },
-    products: [
-      {
-        product: {
-          type: Schema.Types.ObjectId,
-          ref: "products",
-          required: true,
-        },
-        quantity: {
-          type: Number,
-          required: true,
-        },
+    buyerID: {
+        type: Schema.Types.ObjectId,
+        ref: 'users',
+    },
+    sellerID: {
+        type: Schema.Types.ObjectId,
+        ref: 'users',
+    },
+    status: {                    // Status of the listing
+        type: String,
+        enum: ['pending', 'completed'],
+        default: 'pending'
       },
-    ],
-    totalPrice: {
-      type: Number,
-    },
-    status: {
-      type: String,
-      enum: ["Pending", "Paid", "Shipped", "Completed", "Cancelled"],
-      default: "Pending",
-    },
-    transaction: {
-      id: String,
-      transactionStatus: String,
-      bank_status: String,
-      sp_code: String,
-      sp_message: String,
-      method: String,
-      date_time: String,
-    },
+    transactionId: { type: String, required: true, unique: true },
 </pre>
 
 # User Model 👥
 <pre>
-name: {
+    name: {
       type: String,
       required: true,
     },
@@ -139,9 +154,7 @@ name: {
       required: true,
       unique: true,
     },
-    photoURL: {
-      type: String,
-    },
+    phonenumber: { type: String, required: true, default: "N/A" },
     password: {
       type: String,
       required: true,
@@ -151,55 +164,46 @@ name: {
       enum: ['admin', 'user'], // user role admin or user
       default: 'user', // default user role
     },
-    phone: { type: String, required: true, default: "N/A" },
-    address: { type: String, required: true, default: "N/A" },
-    city: { type: String, required: true, default: "N/A" },
     isBlocked: {
       type: Boolean,
       default: false,
     }
 </pre>
 
-# Blog Model
+# Wish Model
 
 <pre>
-    title: {
-        type: String,
-        required: true,
-    },
-    content: {
-        type: String,
-        required: true,
-    },
-    author: {
+    product: {
         type: Schema.Types.ObjectId,
-        ref: 'users',
+        ref: 'listings',
+        required: true,
     },
-    isPublished: {
-        type: Boolean,
-        default: true
-    },
+    email: {
+        type: String,
+        required: true,
+    }
 </pre>
 
-# Features of Products ⚡
-<li>Create Products</li>
-<li>Get All Products by Search Terms (ex: name, category, brand)</li>
-<li>Update Products. To update products, you need to update the product using productid.</li>
-<li>Delete Products. To delete products, you need to delete the product using productid.</li>
+# Features of Listing ⚡
+<li>Create Listing</li>
+<li>Get All Listing by Search Terms (ex: title, description, price)</li>
+<li>Update listing. To update listing, you need to update the listing using listingid.</li>
+<li>Delete Listing. To delete listing, you need to delete the listing using listingid.</li>
 
-# Features of Orders 🕎
-<li>Create Orders from customer</li>
-<li>Get All Orders</li>
-<li>Calculate Total Prices each product by the quantity ordered. I am use MongoDB aggregation pipeline </li>
+# Features of Transaction 🕎
+<li>Create Transaction from buyer</li>
+<li>Get Sales History </li>
+<li>Get Buyer History</li>
+<li>Sellers can update item status after a sale. </li>
 
-# Features of Blog 🕎
-<li>Create Blog from user</li>
-<li>Get All Blog</li>
-<li>Update Blog. To update Blog, you need to update the blog using blogid.</li>
-<li>Delete blogs. To delete blogs, you need to delete the blog using blogid.</li>
+# Features of Wish 🕎
+<li>Create Wish from user</li>
+<li>Get All Wish</li>
+<li>Update Wish. To update Wishs, you need to update the blog using wishid.</li>
+<li>Delete Wish. To delete Wishs, you need to delete the blog using wishid.</li>
 
 # Features of Users 👥
-<li>Create Users (ex: name, email, address, phone, role (default role --> user))</li>
+<li>Create Users (ex: name, email, phonenumber, role (default role --> user))</li>
 <li>Get All Users</li>
 <li>Update User route access only admin user. If user role to admin, then show error "Admin role cannot be updated". Because, user can not be access update User Route </li>
 
@@ -239,9 +243,9 @@ name: {
 <li><strong>Not Found:</strong> If you hit a wrong route, it will send a message and tell you your status, and which route you hit. </li>
 <pre>
 {
-    "status": false,
-    "message": "Could not found /api/mylove",
-    "stack": "Error: Could not found /api/mylove\n    at C:\\new ts assignmet\\stationery-shop-server\\src\\app.ts:30:17\n
+    "success": false,
+    "message": "API Not Found /api/v1/transaction",
+    "error": "Error: API Not Found /api/v1/transaction\n    at notFound (/var/task/dist/middlewares/notFound.js:10:19)\n
 }
 </pre>
 
