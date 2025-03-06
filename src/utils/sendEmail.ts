@@ -46,111 +46,46 @@ export const sendMail = async ({
     <script src="https://cdn.tailwindcss.com"></script>
     <title>Order Confirmation</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
-        .email-container {
-            max-height: 100vh;
-            max-width: 600px;
-            min-height: 100%;
-            margin: 20px auto;
-            background: #ffffff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-        }
-        .header {
-            text-align: center;
-            font-size: 40px;
-            font-weight: bold;
-            color: #e5532a;
-        }
-        .product-image {
-            text-align: center;
-            margin-top: 20px;
-        }
-        .product-image img {
-            max-width: 100%;
+        .confirm-btn {
+            background: linear-gradient(to right, #e5532a, #d1461cd2);
+            padding: 10px 30px;
             border-radius: 8px;
-        }
-        .order-details {
-            margin: 20px 0;
-            padding: 15px;
-            background: #f9f9f9;
-            border-radius: 8px;
-        }
-        .order-details p {
-            margin: 8px 0;
-            font-size: 16px;
-            color: #333;
-        }
-        .order-details span {
             font-weight: bold;
-            color: #e5532a;
-        }
-        .buttons {
-            text-align: center;
-            margin-top: 20px;
+            text-decoration: none;
+            transition: all 0.3s ease;
             color: white;
         }
-        .btn {
-            display: inline-block;
-            padding: 10px 20px;
-            margin: 5px;
-            color: white !important;
-            font-size: 16px;
-            text-decoration: none;
-            border-radius: 5px;
-        }
-      .confirm-btn {
-      background: linear-gradient(to right, #e5532a, #d1461cd2); 
-      padding: 10px 30px;
-      border-radius: 8px;
-      font-weight: bold;
-      text-decoration: none;
-      transition: all 0.3s ease;
-      }
 
-.confirm-btn:hover {
-background: linear-gradient(to right, #e5532a, #d1461cd2); 
-cursor: pointer; 
-color: white;
-}
+        .confirm-btn:hover {
+            background: linear-gradient(to right, #e5532a, #d1461cd2);
+            cursor: pointer;
+            color: white;
+        }
     </style>
 </head>
-<body>
+<body class="bg-gray-100 flex justify-center items-center min-h-screen p-4">
+    <div class="email-container bg-white rounded-lg shadow-lg max-w-2xl w-full p-6">
+        <div class="header text-center text-4xl font-bold text-orange-600 mb-6">
+            Order Confirmation ✅
+        </div>
 
-<div class="email-container">
-    <div class="header">
-        Order Confirmation ✅
+        <div class="product-image text-center mb-6">
+            <img src="${image}" alt="Product Image" class="rounded-lg w-full max-w-md mx-auto">
+        </div>
+
+        <div class="order-details bg-gray-50 rounded-lg p-4 mb-6">
+            <p class="text-gray-700 text-lg mb-2"><span class="font-bold text-orange-600">Product Name:</span> ${productName}</p>
+            <p class="text-gray-700 text-lg mb-2"><span class="font-bold text-orange-600">Price:</span> ৳${productPrice}</p>
+            <p class="text-gray-700 text-lg mb-2"><span class="font-bold text-orange-600">Buyer:</span> ${buyerName}</p>
+            <p class="text-gray-700 text-lg"><span class="font-bold text-orange-600">Seller:</span> ${sellerName}</p>
+        </div>
+
+        <div class="buttons text-center">
+            <a target="_blank" rel="noopener noreferrer" href="${process.env.CLIENT_URL}/dashboard/sales-history" class="confirm-btn">
+                Confirm Order
+            </a>
+        </div>
     </div>
-
-    <div class="product-image">
-        <img src="${image}" alt="Product Image">
-    </div>
-
-    <div class="order-details">
-        <p><span>Product Name:</span> ${productName}</p>
-        <p><span>Price:</span> ৳${productPrice}</p>
-        <p><span>Buyer:</span> ${buyerName}</p>
-        <p><span>Seller:</span> ${sellerName}</p>
-    </div>
-
-    <div class="buttons">
-       <a target="_blank" rel="noopener noreferrer" href="${process.env.CLIENT_URL}/dashboard/sales-history" class="btn confirm-btn">
-Confirm Order
-</a>
-
-    </div>
-</div>
-
 </body>
 </html>
     `;
