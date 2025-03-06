@@ -1,8 +1,8 @@
 # 🎉 Welcome to My Stationary Shop !!
-<h2>Stationary Shop API</h2>
-<p>Assalamu Alaikum! My Name is Md Abdul Adud. Project Name: Stationery Shop. I am Develop an Express application with TypeScript, integrating MongoDB with Mongoose to manage a Stationery Shop.</p>
+<h2>Secondhand Mart Server API</h2>
+<p>Assalamu Alaikum! My Name is Md Abdul Adud. Project Name: Secondhand Mart. I am Develop an Express application with TypeScript, integrating MongoDB with Mongoose to manage a Secondhand Mart.</p>
 
-<h2>Project Name: Stationery Shop</h2>
+<h2>Project Name: Secondhand Mart</h2>
 
 <strong>GitHub Repository Link</strong> : https://github.com/sopnilali/second-hand-server
 
